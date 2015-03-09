@@ -6,28 +6,89 @@ using System.Threading.Tasks;
 
 namespace PolarPersonalTrainerLib
 {
+    /// <summary>
+    /// Heart rate data
+    /// </summary>
     public class HeartRate
     {
-        public int resting = 0;
-        public int average = 0;
-        public int maximum = 0;
-        public int vo2Max = 0;
-
-        public Boolean hasData()
+        /// <summary>
+        /// Resting heart rate [bpm]
+        /// </summary>
+        public int Resting { get; set; }
+        /// <summary>
+        /// Average heart rate [bpm]
+        /// </summary>
+        public int Average { get; set; }
+        /// <summary>
+        /// Maximum heart rate [bpm]
+        /// </summary>
+        public int Maximum { get; set; }
+        /// <summary>
+        /// VO2 max
+        /// </summary>
+        public int Vo2Max { get; set; }
+        /// <summary>
+        /// Heart rate values [bpm]
+        /// </summary>
+        public List<byte> Values { get; set; }
+ 
+        public Boolean HasData
         {
-            if (resting <= 0 && average <= 0 && maximum <= 0 && vo2Max <= 0)
-                return false;
+            get
+            {
+                if (Resting <= 0 && Average <= 0 && Maximum <= 0 && Vo2Max <= 0)
+                    return false;
 
-            return true;
+                return true;
+            }
+        }
+
+        public HeartRate()
+        {
+            Values = new List<byte>();
         }
     }
 
+    /// <summary>
+    /// Exercise available through PolarPersonalTrainer.com
+    /// </summary>
     public class PPTExercise
     {
-        public DateTime time { get; set; }
-        public String sport { get; set; }
-        public int calories { get; set; }
-        public TimeSpan duration { get; set; }
-        public HeartRate heartRate { get; set; }
+        /// <summary>
+        /// Start time
+        /// </summary>
+        public DateTime StartTime { get; set; }
+        /// <summary>
+        /// Duration of exercise
+        /// </summary>
+        public TimeSpan Duration { get; set; }
+        /// <summary>
+        /// Sport
+        /// </summary>
+        public string Sport { get; set; }
+        /// <summary>
+        /// Burned calories (kcal)
+        /// </summary>
+        public int Calories { get; set; }
+        /// <summary>
+        /// Distance in meters
+        /// </summary>
+        public float Distance { get; set; }
+        /// <summary>
+        /// Heart rate info
+        /// </summary>
+        public HeartRate HeartRate { get; set; }
+        /// <summary>
+        /// Cadence values [rpm]
+        /// </summary>
+        public List<byte> CadenceValues { get; set; }
+        /// <summary>
+        /// Speed values [kph] ???? or mph
+        /// </summary>
+        public List<float> SpeedValues { get; set; }
+        /// <summary>
+        /// Sampling interval [seconds]
+        /// </summary>
+        public int RecordingRate { get; set; }
     }
 }

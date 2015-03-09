@@ -1,108 +1,51 @@
 ﻿using HtmlAgilityPack;
 using System;
-using System.Collections.Specialized;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace PolarPersonalTrainerLib
 {
+    /// <summary>
+    /// Exercise exporter
+    /// </summary>
     public class PPTExport
     {
-        private XmlDocument xml;
-        private String username;
-        private String password;
+        private const string BaseUrl = "https://www.polarpersonaltrainer.com";
+        private String _userName;
+        private String _password;
 
-        // Persistent cookie container for all requests
-        private CookieContainer cookieJar;
-
-        public PPTExport(String username, String password)
+        public PPTExport(String userName, String password)
         {
-            this.password = password;
-            this.username = username;
-            cookieJar = new CookieContainer();
+            this._password = password;
+            this._userName = userName;
         }
 
-        public XmlDocument getXml()
-        {
-            return this.xml;
-        }
-
-        private HttpWebRequest newHttpWebRequest(String url, String requestMethod)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-
-            request.CookieContainer = cookieJar;
-            request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-            request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.2";
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.Credentials = CredentialCache.DefaultCredentials;
-            request.Timeout = 5000;
-            request.Method = requestMethod;
-
-            return request;
-        }
-
-        private String postRequest(String url, String strPost)
-        {
-            HttpWebRequest request = newHttpWebRequest(url, "POST");
-
-            // Turn string into a byte stream
-            byte[] postBytes = Encoding.ASCII.GetBytes(strPost);
-
-            request.ContentLength = postBytes.Length;
-
-            using (var requestStream = request.GetRequestStream())
-            {
-                requestStream.Write(postBytes, 0, postBytes.Length);
-                requestStream.Close();
-            }
-
-            using (var response = (HttpWebResponse)request.GetResponse())
-            {
-                if (response == null)
-                    throw new PPTException(String.Format("POST request to {1} did not get a reponse", url));
-
-                using (var reader = new StreamReader(response.GetResponseStream()))
-                    return reader.ReadToEnd();
-            }
-        }
-
-        private String getRequest(String url)
-        {
-            HttpWebRequest request = newHttpWebRequest(url, "GET");
-
-            using (var response = (HttpWebResponse)request.GetResponse())
-            {
-                if (response == null)
-                    throw new PPTException(String.Format("GET request from {1} did not get a reponse", url));
-
-                using (var reader = new StreamReader(response.GetResponseStream()))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
-        }
-
-        private String getTrainingSessions(HtmlNode calItems)
+        private String GetTrainingSessions(HtmlNode calItems)
         {
             int itemCount = 0;
-            NameValueCollection keyValues = new NameValueCollection();
+            var keyValues = new Dictionary<string, string>();
 
             keyValues.Add(".action", "export");
             keyValues.Add(".filename", "export.xml");
 
-            foreach (HtmlNode row in calItems.SelectNodes("./tr") ?? Enumerable.Empty<HtmlNode>())
+            foreach (HtmlNode row in calItems.Descendants("tr") ?? Enumerable.Empty<HtmlNode>())
             {
                 if (row.GetAttributeValue("class", "").Equals("listHeadRow"))
                     continue;
 
-                foreach (HtmlNode cell in row.SelectNodes("./td") ?? Enumerable.Empty<HtmlNode>())
+                foreach (HtmlNode cell in row.Descendants("td") ?? Enumerable.Empty<HtmlNode>())
                 {
                     // Check if the training Type is OptimizedExcercise (training data which has a sport assigned)
-                    HtmlNode itemType = cell.SelectSingleNode("./input[@name='calendarItemTypes']");
+                    HtmlNode itemType = cell.Elements("input").FirstOrDefault(element => element.GetAttributeValue("name", "") == "calendarItemTypes");
 
                     if (itemType == null)
                         continue;
@@ -110,7 +53,7 @@ namespace PolarPersonalTrainerLib
                     if (!itemType.GetAttributeValue("value", "").Equals("OptimizedExercise"))
                         continue;
 
-                    HtmlNode itemValue = cell.SelectSingleNode("./input[@name='calendarItem']");
+                    HtmlNode itemValue = cell.Elements("input").FirstOrDefault(element => element.GetAttributeValue("name", "") == "calendarItem");
 
                     if (itemValue == null)
                         continue;
@@ -123,27 +66,65 @@ namespace PolarPersonalTrainerLib
             if (keyValues.Count <= 2)
                 return null;
 
-            var strPost = "";
+            var strPost = new StringBuilder();
 
-            foreach (string key in keyValues)
+            foreach (string key in keyValues.Keys)
             {
-                strPost += key + "=" + WebUtility.UrlEncode(keyValues[key]) + "&";
+                strPost.AppendFormat("{0}={1}&", key, WebUtility.UrlEncode(keyValues[key]));
             }
+            if (strPost.Length > 0)
+                strPost.Remove(strPost.Length - 1, 1); // remove the last '&'
 
-            strPost.Remove(strPost.Length - 1, 1); // remove the last '&'
-
-            return strPost;
+            return strPost.ToString();
         }
 
-        public XmlDocument downloadSessions(DateTime startDate, DateTime endDate)
+        public async Task<PPTUserSettings> GetUserSettings(HttpClient httpClient)
         {
-            System.Net.ServicePointManager.DefaultConnectionLimit = 1600;
+            var url = BaseUrl + "/user/settings/index.ftl";
+            var response = await httpClient.GetAsync(url);
+            var responseStr = await response.Content.ReadAsStringAsync();
+            HtmlNode.ElementsFlags.Remove("option");
+            var doc = new HtmlDocument();
+            doc.LoadHtml(responseStr);
 
+            var settings = new PPTUserSettings();
+            var nodeDateFormat = doc.DocumentNode.Descendants("select").FirstOrDefault(
+                node => node.HasAttributes && node.Attributes.FirstOrDefault(attr => attr.Value == "data.dateFormat") != null);
+            var selectedDateFormatNode = nodeDateFormat.Descendants().First(node => node.HasAttributes && node.Attributes.Contains("selected"));
+            var dateFormat = selectedDateFormatNode.Attributes.First(attr => attr.Name == "value").Value;
+
+            var nodeDateSeparator = doc.DocumentNode.Descendants("select").FirstOrDefault(
+                node => node.HasAttributes && node.Attributes.FirstOrDefault(attr => attr.Value == "data.dateSeparator") != null);
+            var selectedDateSeparatorNode = nodeDateSeparator.Descendants().First(node => node.HasAttributes && node.Attributes.Contains("selected"));
+            var separator = selectedDateSeparatorNode.Attributes.First(attr => attr.Name == "value").Value;
+            settings.DateFormat = dateFormat.Replace(" ", separator);
+            
+            return settings;
+        }
+
+        private HttpClient CreateHttpClient()
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xhtml+xml"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
+
+            return client;
+        }
+
+        public async Task<IEnumerable<PPTExercise>> GetExercises(DateTime startDate, DateTime endDate)
+        {
             // Attempt login
-            var url = "https://www.polarpersonaltrainer.com/index.ftl";
-            var strPost = "email=" + username + "&password=" + password + "&.action=login&tz=0";
+            var client = CreateHttpClient();
 
-            var responseStr = postRequest(url, strPost);
+            var url = BaseUrl + "/index.ftl";
+            var strPost = string.Format("email={0}&password={1}&.action=login&tz=0", _userName, _password);
+
+            var postData = Encoding.GetEncoding("ASCII").GetBytes(strPost);
+            var response = await client.PostAsync(url, new StringContent(strPost, Encoding.GetEncoding("ASCII"), "application/x-www-form-urlencoded"));
+
+            var responseStr = await response.Content.ReadAsStringAsync();
+            //var responseStr = postRequest(url, strPost);
 
             if (responseStr == null || responseStr.Length == 0)
                 throw new PPTException("Failed to login to PolarPersonalTrainer.com");
@@ -154,30 +135,38 @@ namespace PolarPersonalTrainerLib
             if (doc.GetElementbyId("ico-logout") == null)
                 throw new PPTException("Unable to login to PolarPersonalTrainer.com using the provided credentials");
 
-            url = "https://www.polarpersonaltrainer.com/user/calendar/inc/listview.ftl?" +
-                "startDate=" + startDate.ToString("dd.MM.yyyy") + "&endDate=" + endDate.ToString("dd.MM.yyyy");
+            // retrieve user settings
+            var settings = await GetUserSettings(client);
 
             // Attempt to get the list of training sessions for the requested dates
+            url = string.Format("{0}/user/calendar/inc/listview.ftl?startDate={1}&endDate={2}", BaseUrl,
+                startDate.ToString(settings.DateFormat), endDate.ToString(settings.DateFormat));
+            response = await client.GetAsync(url);
+            responseStr = await response.Content.ReadAsStringAsync();
+
             doc = new HtmlDocument();
-            doc.LoadHtml(getRequest(url));
+            doc.LoadHtml(responseStr);
 
             var calItems = doc.GetElementbyId("calItems");
 
             if (calItems == null)
                 throw new PPTException("No diary items found in the selected timeframe");
-            
-            url = "https://www.polarpersonaltrainer.com/user/calendar/index.jxml";
 
-            strPost = getTrainingSessions(calItems);
+            strPost = GetTrainingSessions(calItems);
 
             if (strPost == null)
                 throw new PPTException("No complete training sessions found");
 
             // Attempt to export the XML file for the excercises found above
-            xml = new XmlDocument();
-            xml.LoadXml(postRequest(url, strPost));
+            url = BaseUrl + "/user/calendar/index.jxml";
+            response = await client.PostAsync(url, new StringContent(strPost, Encoding.GetEncoding("ASCII"), "application/x-www-form-urlencoded"));
+            var responseStream = await response.Content.ReadAsStreamAsync();
+            var element = XElement.Load(responseStream);
+            var reader = element.CreateReader();
+            reader.MoveToContent();
 
-            return xml;
+            var extractor = new PPTExtract();
+            return PPTExtract.ConvertXmlToExercises(element, false);
         }
     }
 }

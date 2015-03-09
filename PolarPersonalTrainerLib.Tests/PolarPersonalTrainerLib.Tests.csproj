@@ -57,7 +57,7 @@
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PolarPersonalTrainerLib\PolarPersonalTrainerLib.csproj">
+    <ProjectReference Include="..\PolarPersonalTrainerLib.PCL\PolarPersonalTrainerLib.PCL.csproj">
       <Project>{63698e93-204c-4aa8-a07b-352539a380bf}</Project>
       <Name>PolarPersonalTrainerLib</Name>
     </ProjectReference>

@@ -37,19 +37,19 @@ namespace PolarPersonalTrainerLib
 
             DataRow dr = dt.NewRow();
 
-            dr[PPTColumns.Time] = exercise.time;
-            dr[PPTColumns.Sport] = exercise.sport;
-            dr[PPTColumns.Calories] = exercise.calories;
-            dr[PPTColumns.Duration] = exercise.duration;
+            dr[PPTColumns.Time] = exercise.StartTime;
+            dr[PPTColumns.Sport] = exercise.Sport;
+            dr[PPTColumns.Calories] = exercise.Calories;
+            dr[PPTColumns.Duration] = exercise.Duration;
 
-            HeartRate hr = exercise.heartRate;
+            HeartRate hr = exercise.HeartRate;
 
-            if (hr != null && hr.hasData())
+            if (hr != null && hr.HasData)
             {
-                dr[PPTColumns.RestingHR] = exercise.heartRate.resting;
-                dr[PPTColumns.AverageHR] = exercise.heartRate.average;
-                dr[PPTColumns.MaximumHR] = exercise.heartRate.maximum;
-                dr[PPTColumns.VO2Max] = exercise.heartRate.vo2Max;
+                dr[PPTColumns.RestingHR] = exercise.HeartRate.Resting;
+                dr[PPTColumns.AverageHR] = exercise.HeartRate.Average;
+                dr[PPTColumns.MaximumHR] = exercise.HeartRate.Maximum;
+                dr[PPTColumns.VO2Max] = exercise.HeartRate.Vo2Max;
             }
 
             return dr;
@@ -59,17 +59,17 @@ namespace PolarPersonalTrainerLib
         {
             PPTExercise exercise = new PPTExercise();
 
-            exercise.time = Convert.ToDateTime(dr[PPTColumns.Time]);
-            exercise.sport = dr[PPTColumns.Sport].ToString();
-            exercise.calories = Convert.ToInt32(dr[PPTColumns.Calories]);
-            exercise.duration = TimeSpan.Parse(dr[PPTColumns.Duration].ToString());
+            exercise.StartTime = Convert.ToDateTime(dr[PPTColumns.Time]);
+            exercise.Sport = dr[PPTColumns.Sport].ToString();
+            exercise.Calories = Convert.ToInt32(dr[PPTColumns.Calories]);
+            exercise.Duration = TimeSpan.Parse(dr[PPTColumns.Duration].ToString());
 
-            exercise.heartRate = new HeartRate();
+            exercise.HeartRate = new HeartRate();
 
-            exercise.heartRate.resting = Convert.ToInt32(dr[PPTColumns.RestingHR]);
-            exercise.heartRate.average = Convert.ToInt32(dr[PPTColumns.AverageHR]);
-            exercise.heartRate.maximum = Convert.ToInt32(dr[PPTColumns.MaximumHR]);
-            exercise.heartRate.vo2Max = Convert.ToInt32(dr[PPTColumns.VO2Max]);
+            exercise.HeartRate.Resting = Convert.ToInt32(dr[PPTColumns.RestingHR]);
+            exercise.HeartRate.Average = Convert.ToInt32(dr[PPTColumns.AverageHR]);
+            exercise.HeartRate.Maximum = Convert.ToInt32(dr[PPTColumns.MaximumHR]);
+            exercise.HeartRate.Vo2Max = Convert.ToInt32(dr[PPTColumns.VO2Max]);
 
             return exercise;
         }

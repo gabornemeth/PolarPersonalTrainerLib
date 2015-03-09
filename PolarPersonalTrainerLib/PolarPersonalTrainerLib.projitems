@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>67f072ad-f7b8-4693-ba1c-87b07e2538e5</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>PolarPersonalTrainerLib</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\XExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PPTException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PPTExercise.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PPTExport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PPTExtract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PPTUserSettings.cs" />
+  </ItemGroup>
+</Project>

@@ -1,34 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace PolarPersonalTrainerLib
 {
+    /// <summary>
+    /// XML to PPTExercise converter
+    /// </summary>
     public class PPTExtract
     {
-        public static List<PPTExercise> convertXmlToExercises(XmlDocument xml, bool requireSport = false)
+        /// <summary>
+        /// Parsing sample/values node
+        /// </summary>
+        /// <param name="sampleElement"></param>
+        /// <param name="action"></param>
+        private static void ParseValues(XElement sampleElement, Action<string> action)
         {
-            XmlNamespaceManager namespaceManager = new XmlNamespaceManager(xml.NameTable);
-            XmlNodeList xmlNodes = xml.GetElementsByTagName("exercise");
-            
-            if (xmlNodes == null)
+            var values = sampleElement.GetFirstDescendantValue<string>("values");
+            if (values != null)
+            {
+                foreach (var value in values.Split(','))
+                {
+                    action(value);
+                }
+            }
+        }
+
+        public static List<PPTExercise> ConvertXmlToExercises(XElement xml, bool requireSport = false)
+        {
+            var workouts = xml.GetDescendants("exercise");
+            if (workouts == null)
                 throw new InvalidDataException("No Polar exercises found");
 
             List<PPTExercise> exercises = new List<PPTExercise>();
 
-            foreach (XmlElement exerciseNode in xmlNodes)
+            foreach (var element in workouts)
             {
                 PPTExercise exercise = new PPTExercise();
 
-                XmlNode timeNode = exerciseNode["time"];
-                XmlNode sportNode = exerciseNode["sport"];
-                XmlElement resultNode = (XmlElement)exerciseNode["result"];
+                exercise.Distance = element.GetFirstDescendantValue<float>("distance", CultureInfo.InvariantCulture);
+                exercise.StartTime = element.GetFirstDescendantValue<DateTime>("time");
+                exercise.Sport = element.GetFirstDescendantValue<string>("sport");
+                exercise.RecordingRate = element.GetFirstDescendantValue<int>("recording-rate");
+                exercise.CadenceValues = new List<byte>();
+                exercise.SpeedValues = new List<float>();
 
-                if (timeNode == null  || resultNode == null)
+                var timeNode = element.GetFirstDescendant("time");
+                var sportNode = element.GetFirstDescendant("sport");
+                var resultNode = element.GetFirstDescendant("result");
+
+                if (timeNode == null || resultNode == null)
                     continue;
 
                 if (requireSport && sportNode == null)
@@ -37,49 +64,44 @@ namespace PolarPersonalTrainerLib
                 if (sportNode == null && requireSport)
                     continue;
 
-                XmlNode caloriesNode = resultNode["calories"];
-                XmlNode durationNode = resultNode["duration"];
-                XmlElement hrNode = (XmlElement)resultNode["heart-rate"];
-                XmlElement userNode = (XmlElement)resultNode["user-settings"];
-                XmlElement hrUserNode = (XmlElement)userNode["heart-rate"];
-                XmlNode vo2MaxNode = userNode["vo2max"];
+                var hrNode = resultNode.GetFirstDescendant("heart-rate");
+                var userNode = resultNode.GetFirstDescendant("user-settings");
+                var hrUserNode = userNode.GetFirstDescendant("heart-rate");
+                var vo2MaxNode = userNode.GetFirstDescendant("vo2max");
 
-                if (caloriesNode == null || durationNode == null)
-                    continue;
+                exercise.Calories = resultNode.GetFirstDescendantValue<int>("calories");
+                var duration = resultNode.GetFirstDescendantValue<string>("duration");
+                if (!string.IsNullOrEmpty(duration))
+                {
+                    exercise.Duration = TimeSpan.Parse(duration);
+                }
 
-                exercise.time = DateTime.Parse(timeNode.InnerText);
-                exercise.calories = Convert.ToInt32(caloriesNode.InnerText);
-                exercise.duration = TimeSpan.Parse(durationNode.InnerText);
-                
-                if (sportNode != null)
-                    exercise.sport = sportNode.InnerText;
-
-                HeartRate hr = new HeartRate();
+                var hrData = new HeartRate();
 
                 if (hrNode != null)
                 {
-                    XmlNode averageNode = hrNode["average"];
-                    XmlNode maximumNode = hrNode["maximum"];
-
-                    if (maximumNode != null)
-                        hr.maximum = Convert.ToInt32(maximumNode.InnerText);
-
-                    if (averageNode != null)
-                        hr.average = Convert.ToInt32(averageNode.InnerText);
+                    hrData.Maximum = hrNode.GetFirstDescendantValue<int>("maximum");
+                    hrData.Average = hrNode.GetFirstDescendantValue<int>("average");
                 }
 
                 if (hrUserNode != null)
                 {
-                    XmlNode restingNode = hrUserNode["resting"];
-
-                    if (restingNode != null)
-                        hr.resting = Convert.ToInt32(restingNode.InnerText);
+                    hrData.Resting = hrUserNode.GetFirstDescendantValue<int>("resting");
                 }
+                hrData.Vo2Max = userNode.GetFirstDescendantValue<int>("vo2max");
 
-                if (vo2MaxNode != null)
-                    hr.vo2Max = Convert.ToInt32(vo2MaxNode.InnerText);
+                exercise.HeartRate = hrData;
 
-                exercise.heartRate = hr;
+                foreach (var sample in element.GetDescendants("sample"))
+                {
+                    var type = sample.GetFirstDescendantValue<string>("type");
+                    if (type == "HEARTRATE")
+                        ParseValues(sample, hr => { exercise.HeartRate.Values.Add(Convert.ToByte(hr)); });
+                    else if (type == "SPEED")
+                        ParseValues(sample, speed => { exercise.SpeedValues.Add(Convert.ToSingle(speed, CultureInfo.InvariantCulture)); });
+                    else if (type == "CADENCE")
+                        ParseValues(sample, cadence => { exercise.CadenceValues.Add(Convert.ToByte(cadence)); });
+                }
 
                 exercises.Add(exercise);
             }
