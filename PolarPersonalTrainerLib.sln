@@ -11,6 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarPersonalTrainerLib.NET
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PolarPersonalTrainerLib", "PolarPersonalTrainerLib\PolarPersonalTrainerLib.shproj", "{67F072AD-F7B8-4693-BA1C-87B07E2538E5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B73A333A-B7D3-42EB-B53C-ECC38BDC05D3}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{67f072ad-f7b8-4693-ba1c-87b07e2538e5}*SharedItemsImports = 13

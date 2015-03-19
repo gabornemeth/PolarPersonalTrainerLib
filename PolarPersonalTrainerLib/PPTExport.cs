@@ -78,8 +78,9 @@ namespace PolarPersonalTrainerLib
             return strPost.ToString();
         }
 
-        public async Task<PPTUserSettings> GetUserSettings(HttpClient httpClient)
+        public async Task<PPTUser> GetUser()
         {
+            var httpClient = await Login();
             var url = BaseUrl + "/user/settings/index.ftl";
             var response = await httpClient.GetAsync(url);
             var responseStr = await response.Content.ReadAsStringAsync();
@@ -87,7 +88,26 @@ namespace PolarPersonalTrainerLib
             var doc = new HtmlDocument();
             doc.LoadHtml(responseStr);
 
-            var settings = new PPTUserSettings();
+            var user = new PPTUser();
+            // name of the user
+            var nodeFirstName = doc.GetElementbyId("user.name.firstName");
+            user.FirstName = nodeFirstName.GetAttributeValue("value", "");
+
+            var nodeLastName = doc.GetElementbyId("user.name.lastName");
+            user.LastName = nodeLastName.GetAttributeValue("value", "");
+
+            var nodeNickName = doc.GetElementbyId("user.nickName");
+            user.Nickname = nodeNickName.GetAttributeValue("value", "");
+
+            // measurement units
+            var nodeUnits = doc.DocumentNode.Descendants("input").FirstOrDefault(node =>
+                node.GetAttributeValue("name", "") == "data.units" && node.GetAttributeValue("checked", "false") == "true");
+            if (nodeUnits.GetAttributeValue("value", "METRIC") == "METRIC")
+                user.Units = Units.Metric;
+            else
+                user.Units = Units.Imperial;
+
+            // retrieve date format
             var nodeDateFormat = doc.DocumentNode.Descendants("select").FirstOrDefault(
                 node => node.HasAttributes && node.Attributes.FirstOrDefault(attr => attr.Value == "data.dateFormat") != null);
             var selectedDateFormatNode = nodeDateFormat.Descendants().First(node => node.HasAttributes && node.Attributes.Contains("selected"));
@@ -97,31 +117,25 @@ namespace PolarPersonalTrainerLib
                 node => node.HasAttributes && node.Attributes.FirstOrDefault(attr => attr.Value == "data.dateSeparator") != null);
             var selectedDateSeparatorNode = nodeDateSeparator.Descendants().First(node => node.HasAttributes && node.Attributes.Contains("selected"));
             var separator = selectedDateSeparatorNode.Attributes.First(attr => attr.Name == "value").Value;
-            settings.DateFormat = dateFormat.Replace(" ", separator);
-            
-            return settings;
+            user.DateFormat = dateFormat.Replace(" ", separator);
+
+            return user;
         }
 
-        private HttpClient CreateHttpClient()
+        private async Task<HttpClient> Login()
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xhtml+xml"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
 
-            return client;
-        }
-
-        public async Task<IEnumerable<PPTExercise>> GetExercises(DateTime startDate, DateTime endDate)
-        {
             // Attempt login
-            var client = CreateHttpClient();
-
             var url = BaseUrl + "/index.ftl";
             var strPost = string.Format("email={0}&password={1}&.action=login&tz=0", _userName, _password);
 
-            var postData = Encoding.GetEncoding("ASCII").GetBytes(strPost);
-            var response = await client.PostAsync(url, new StringContent(strPost, Encoding.GetEncoding("ASCII"), "application/x-www-form-urlencoded"));
+            var encoding = Encoding.UTF8;
+            var postData = encoding.GetBytes(strPost);
+            var response = await client.PostAsync(url, new StringContent(strPost, encoding, "application/x-www-form-urlencoded"));
 
             var responseStr = await response.Content.ReadAsStringAsync();
             //var responseStr = postRequest(url, strPost);
@@ -135,16 +149,24 @@ namespace PolarPersonalTrainerLib
             if (doc.GetElementbyId("ico-logout") == null)
                 throw new PPTException("Unable to login to PolarPersonalTrainer.com using the provided credentials");
 
+            return client;
+        }
+
+        public async Task<IEnumerable<PPTExercise>> GetExercises(DateTime startDate, DateTime endDate)
+        {
+            // Attempt login
+            var client = await Login();
+
             // retrieve user settings
-            var settings = await GetUserSettings(client);
+            var settings = await GetUser();
 
             // Attempt to get the list of training sessions for the requested dates
-            url = string.Format("{0}/user/calendar/inc/listview.ftl?startDate={1}&endDate={2}", BaseUrl,
+            var url = string.Format("{0}/user/calendar/inc/listview.ftl?startDate={1}&endDate={2}", BaseUrl,
                 startDate.ToString(settings.DateFormat), endDate.ToString(settings.DateFormat));
-            response = await client.GetAsync(url);
-            responseStr = await response.Content.ReadAsStringAsync();
+            var response = await client.GetAsync(url);
+            var responseStr = await response.Content.ReadAsStringAsync();
 
-            doc = new HtmlDocument();
+            var doc = new HtmlDocument();
             doc.LoadHtml(responseStr);
 
             var calItems = doc.GetElementbyId("calItems");
@@ -152,14 +174,14 @@ namespace PolarPersonalTrainerLib
             if (calItems == null)
                 throw new PPTException("No diary items found in the selected timeframe");
 
-            strPost = GetTrainingSessions(calItems);
+            var strPost = GetTrainingSessions(calItems);
 
             if (strPost == null)
                 throw new PPTException("No complete training sessions found");
 
             // Attempt to export the XML file for the excercises found above
             url = BaseUrl + "/user/calendar/index.jxml";
-            response = await client.PostAsync(url, new StringContent(strPost, Encoding.GetEncoding("ASCII"), "application/x-www-form-urlencoded"));
+            response = await client.PostAsync(url, new StringContent(strPost, Encoding.UTF8, "application/x-www-form-urlencoded"));
             var responseStream = await response.Content.ReadAsStreamAsync();
             var element = XElement.Load(responseStream);
             var reader = element.CreateReader();

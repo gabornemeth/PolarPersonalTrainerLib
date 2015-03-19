@@ -64,7 +64,7 @@ namespace PolarPersonalTrainerLib
                 if (sportNode == null && requireSport)
                     continue;
 
-                var hrNode = resultNode.GetFirstDescendant("heart-rate");
+                var hrNode = resultNode.GetFirstElement("heart-rate");
                 var userNode = resultNode.GetFirstDescendant("user-settings");
                 var hrUserNode = userNode.GetFirstDescendant("heart-rate");
                 var vo2MaxNode = userNode.GetFirstDescendant("vo2max");

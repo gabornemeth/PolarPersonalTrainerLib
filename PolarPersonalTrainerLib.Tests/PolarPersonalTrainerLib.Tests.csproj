@@ -59,7 +59,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PolarPersonalTrainerLib.PCL\PolarPersonalTrainerLib.PCL.csproj">
       <Project>{63698e93-204c-4aa8-a07b-352539a380bf}</Project>
-      <Name>PolarPersonalTrainerLib</Name>
+      <Name>PolarPersonalTrainerLib.PCL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

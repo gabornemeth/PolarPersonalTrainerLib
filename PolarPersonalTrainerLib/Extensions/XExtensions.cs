@@ -36,5 +36,10 @@ namespace PolarPersonalTrainerLib
 
             return (T)Convert.ChangeType(descendant.Value, typeof(T), formatProvider);
         }
+
+        public static XElement GetFirstElement(this XElement element, string localName)
+        {
+            return element.Elements().FirstOrDefault(x => x.Name.LocalName == localName);
+        }
     }
 }
