@@ -25,7 +25,7 @@ namespace PolarPersonalTrainerLib
             var values = sampleElement.GetFirstDescendantValue<string>("values");
             if (values != null)
             {
-                foreach (var value in values.Split(','))
+                foreach (var value in values.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     action(value);
                 }
