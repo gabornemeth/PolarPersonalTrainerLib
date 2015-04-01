@@ -16,5 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)PPTExport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PPTExtract.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PPTUser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SharedAssemblyInfo.cs" />
   </ItemGroup>
 </Project>

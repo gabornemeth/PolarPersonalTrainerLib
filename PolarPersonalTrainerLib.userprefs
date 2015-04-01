@@ -1,0 +1,12 @@
+﻿<Properties StartupItem="PolarPersonalTrainerLib.PCL\PolarPersonalTrainerLib.PCL.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="..\Extrava\Extrava\Model\MemoryActivity.cs" line="215" offsetX="914" offsetY="3424" expression="Distance" liveUpdate="False" />
+    <Watch file="..\Extrava\Extrava\ViewModel\AppViewModel.cs" line="121" offsetX="340" offsetY="1920" expression="tracker" liveUpdate="False" />
+    <Watch file="..\Extrava\Extrava.Droid\Renderers\XFMapRenderer.cs" line="102" offsetX="326" offsetY="1515" expression="_polyline.Points" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+</Properties>
