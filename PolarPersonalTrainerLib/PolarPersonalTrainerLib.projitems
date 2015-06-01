@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\XExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GPXExercise.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GpxExercise.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PPTException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PPTExercise.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PPTExport.cs" />

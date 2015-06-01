@@ -203,11 +203,10 @@ namespace PolarPersonalTrainerLib
             var reader = element.CreateReader();
             reader.MoveToContent();
 
-            var extractor = new PPTExtract();
-            return PPTExtract.ConvertXmlToExercises(element, false);
+            return PPTExtract.ConvertXmlToExercises(element);
         }
 
-        public async Task<GPXExercise> GetGPSData(PPTExercise exercise)
+        public async Task<GpxExercise> GetGpsData(PPTExercise exercise)
         {
             // retrieve user settings
             var user = await GetUser();
@@ -219,21 +218,23 @@ namespace PolarPersonalTrainerLib
             var response = await client.GetAsync(url);
             var responseStr = await response.Content.ReadAsStringAsync();
 
-            string gpxId = System.Text.RegularExpressions.Regex.Match(responseStr, @"analyze\.ftl\?id=(\d+)").Groups[1].Value;
+            var gpxId = System.Text.RegularExpressions.Regex.Match(responseStr, @"analyze\.ftl\?id=(\d+)").Groups[1].Value;
 
             if (gpxId == null)
                 throw new PPTException("No diary items found in the selected timeframe");
 
-            var keyValues = new Dictionary<string, string>();
-            keyValues.Add(".action", "gpx");
-            keyValues.Add("items.0.item", gpxId);
-            keyValues.Add("items.0.itemType", "OptimizedExercise");
+            var keyValues = new Dictionary<string, string>
+            {
+                {".action", "gpx"},
+                {"items.0.item", gpxId},
+                {"items.0.itemType", "OptimizedExercise"}
+            };
 
             string postStr = String.Join("&", keyValues.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
 
             // Attempt to export the XML file for the excercises found above
             url = BaseUrl + "/user/calendar/index.gpx";
-            response = await client.PostAsync(url, new StringContent(postStr, Encoding.GetEncoding("ASCII"), "application/x-www-form-urlencoded"));
+            response = await client.PostAsync(url, new StringContent(postStr, Encoding.UTF8, "application/x-www-form-urlencoded"));
 
             // Test if GPS data does exist
             if (response.RequestMessage.RequestUri.Query.Contains("nothing_to_export"))
@@ -241,8 +242,8 @@ namespace PolarPersonalTrainerLib
 
             var responseStream = await response.Content.ReadAsStreamAsync();
             var element = XElement.Load(responseStream);
-            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(GPXExercise));
-            GPXExercise ex = (GPXExercise)serializer.Deserialize(element.CreateReader());
+            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(GpxExercise));
+            var ex = (GpxExercise)serializer.Deserialize(element.CreateReader());
             return ex;
         }
     }

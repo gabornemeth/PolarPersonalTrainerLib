@@ -1,340 +1,178 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Xml.Serialization;
 
 namespace PolarPersonalTrainerLib
 {
-
     /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
-    [System.Xml.Serialization.XmlRootAttribute(ElementName= "gpx", Namespace = "http://www.topografix.com/GPX/1/1", IsNullable = false)]
-    public partial class GPXExercise
+    [XmlType(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
+    [XmlRoot(ElementName = "gpx", Namespace = "http://www.topografix.com/GPX/1/1", IsNullable = false)]
+    public class GpxExercise
     {
-
-        private gpxMetadata metadataField;
-
-        private gpxTrk trkField;
-
-        private string creatorField;
-
-        private decimal versionField;
-
-        /// <remarks/>
-        public gpxMetadata metadata
+        [XmlElement("metadata")]
+        public GpxMetadata MetaData
         {
-            get
-            {
-                return this.metadataField;
-            }
-            set
-            {
-                this.metadataField = value;
-            }
+            get;
+            set;
         }
 
         /// <remarks/>
-        public gpxTrk trk
+        [XmlElement("trk")]
+        public GpxTrack Track
         {
-            get
-            {
-                return this.trkField;
-            }
-            set
-            {
-                this.trkField = value;
-            }
+            get;
+            set;
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string creator
+        [XmlAttribute("creator")]
+        public string Creator
         {
-            get
-            {
-                return this.creatorField;
-            }
-            set
-            {
-                this.creatorField = value;
-            }
+            get;
+            set;
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal version
+        [XmlAttribute("version")]
+        public string Version
         {
-            get
-            {
-                return this.versionField;
-            }
-            set
-            {
-                this.versionField = value;
-            }
+            get;
+            set;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
-    public partial class gpxMetadata
+    [XmlType(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
+    public class GpxMetadata
     {
-
-        private string nameField;
-
-        private gpxMetadataAuthor authorField;
-
-        private System.DateTime timeField;
-
-        private gpxMetadataBounds boundsField;
-
         /// <remarks/>
-        public string name
+        [XmlElement("name")]
+        public string Name
         {
-            get
-            {
-                return this.nameField;
-            }
-            set
-            {
-                this.nameField = value;
-            }
+            get; set;
         }
 
         /// <remarks/>
-        public gpxMetadataAuthor author
+        [XmlElement("author")]
+        public GpxMetadataAuthor Author
         {
-            get
-            {
-                return this.authorField;
-            }
-            set
-            {
-                this.authorField = value;
-            }
+            get; set;
         }
 
         /// <remarks/>
-        public System.DateTime time
+        [XmlElement("time")]
+        public DateTime Time
         {
-            get
-            {
-                return this.timeField;
-            }
-            set
-            {
-                this.timeField = value;
-            }
+            get; set;
         }
 
         /// <remarks/>
-        public gpxMetadataBounds bounds
+        [XmlElement("bounds")]
+        public GpxMetadataBounds Bounds
         {
-            get
-            {
-                return this.boundsField;
-            }
-            set
-            {
-                this.boundsField = value;
-            }
+            get; set;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
-    public partial class gpxMetadataAuthor
+    [XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
+    public class GpxMetadataAuthor
     {
-
-        private string nameField;
-
-        /// <remarks/>
-        public string name
+        [XmlElement("name")]
+        public string Name
         {
-            get
-            {
-                return this.nameField;
-            }
-            set
-            {
-                this.nameField = value;
-            }
+            get; set;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
-    public partial class gpxMetadataBounds
+    [XmlType(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
+    public class GpxMetadataBounds
     {
-
-        private decimal maxlonField;
-
-        private decimal maxlatField;
-
-        private decimal minlonField;
-
-        private decimal minlatField;
+        /// <remarks/>
+        [XmlAttribute("maxlon")]
+        public decimal MaxLongitude { get; set; }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal maxlon
+        [XmlAttribute("maxlat")]
+        public decimal MaxLatitude
         {
-            get
-            {
-                return this.maxlonField;
-            }
-            set
-            {
-                this.maxlonField = value;
-            }
+            get;
+            set;
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal maxlat
+        [XmlAttribute("minlon")]
+        public decimal MinLongitude
         {
-            get
-            {
-                return this.maxlatField;
-            }
-            set
-            {
-                this.maxlatField = value;
-            }
+            get;
+            set;
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal minlon
-        {
-            get
-            {
-                return this.minlonField;
-            }
-            set
-            {
-                this.minlonField = value;
-            }
-        }
+        [XmlAttribute("minlat")]
+        public decimal MinLatitude { get; set; }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal minlat
+    /// <summary>
+    /// GPX track
+    /// </summary>
+    [XmlType(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
+    public class GpxTrack
+    {
+        /// <summary>
+        /// Track points
+        /// </summary>
+        [XmlArray("trkseg")]
+        [XmlArrayItemAttribute("trkpt", IsNullable = false)]
+        public GpxTrackpoint[] Trackpoints
         {
-            get
-            {
-                return this.minlatField;
-            }
-            set
-            {
-                this.minlatField = value;
-            }
+            get;
+            set;
         }
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
-    public partial class gpxTrk
+    [XmlType(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
+    public class GpxTrackpoint
     {
-
-        private gpxTrkTrkpt[] trksegField;
+        /// <remarks/>
+        [XmlElement("ele")]
+        public decimal Elevation
+        {
+            get;
+            set;
+        }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("trkpt", IsNullable = false)]
-        public gpxTrkTrkpt[] trkseg
+        [XmlElement("time")]
+        public DateTime Time
         {
-            get
-            {
-                return this.trksegField;
-            }
-            set
-            {
-                this.trksegField = value;
-            }
+            get;
+            set;
+        }
+
+        /// <remarks/>
+        [XmlElement("sat")]
+        public byte Satellites
+        {
+            get;
+            set;
+        }
+
+        /// <remarks/>
+        [XmlAttribute("lon")]
+        public decimal Longitude
+        {
+            get;
+            set;
+        }
+
+        /// <remarks/>
+        [XmlAttribute("lat")]
+        public decimal Latitude
+        {
+            get;
+            set;
         }
     }
-
-    /// <remarks/>
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
-    public partial class gpxTrkTrkpt
-    {
-
-        private decimal eleField;
-
-        private System.DateTime timeField;
-
-        private byte satField;
-
-        private decimal lonField;
-
-        private decimal latField;
-
-        /// <remarks/>
-        public decimal ele
-        {
-            get
-            {
-                return this.eleField;
-            }
-            set
-            {
-                this.eleField = value;
-            }
-        }
-
-        /// <remarks/>
-        public System.DateTime time
-        {
-            get
-            {
-                return this.timeField;
-            }
-            set
-            {
-                this.timeField = value;
-            }
-        }
-
-        /// <remarks/>
-        public byte sat
-        {
-            get
-            {
-                return this.satField;
-            }
-            set
-            {
-                this.satField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal lon
-        {
-            get
-            {
-                return this.lonField;
-            }
-            set
-            {
-                this.lonField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public decimal lat
-        {
-            get
-            {
-                return this.latField;
-            }
-            set
-            {
-                this.latField = value;
-            }
-        }
-    }
-
 }
-
