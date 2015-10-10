@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio 2012
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarPersonalTrainerLib.PCL", "PolarPersonalTrainerLib.PCL\PolarPersonalTrainerLib.PCL.csproj", "{63698E93-204C-4AA8-A07B-352539A380BF}"
@@ -20,26 +20,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B73A33
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarPersonalTrainerLib.Android", "PolarPersonalTrainerLib.Android\PolarPersonalTrainerLib.Android.csproj", "{25650ACF-5F76-41BB-AC51-08F76D2C7672}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarPersonalTrainerLib.iOS", "PolarPersonalTrainerLib.iOS\PolarPersonalTrainerLib.iOS.csproj", "{88812F00-3A9D-4115-8528-86CAC5F280CA}"
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{67f072ad-f7b8-4693-ba1c-87b07e2538e5}*SharedItemsImports = 13
-		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{230fae06-4c74-45cf-bffa-30c682da0ec3}*SharedItemsImports = 4
-		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{25650acf-5f76-41bb-ac51-08f76d2c7672}*SharedItemsImports = 4
-		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{63698e93-204c-4aa8-a07b-352539a380bf}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{63698E93-204C-4AA8-A07B-352539A380BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63698E93-204C-4AA8-A07B-352539A380BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63698E93-204C-4AA8-A07B-352539A380BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63698E93-204C-4AA8-A07B-352539A380BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E791DB44-D6F9-49B2-8F14-7F005B51B4C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E791DB44-D6F9-49B2-8F14-7F005B51B4C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E791DB44-D6F9-49B2-8F14-7F005B51B4C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E791DB44-D6F9-49B2-8F14-7F005B51B4C9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{230FAE06-4C74-45CF-BFFA-30C682DA0EC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{230FAE06-4C74-45CF-BFFA-30C682DA0EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{230FAE06-4C74-45CF-BFFA-30C682DA0EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,6 +36,26 @@ Global
 		{25650ACF-5F76-41BB-AC51-08F76D2C7672}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25650ACF-5F76-41BB-AC51-08F76D2C7672}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25650ACF-5F76-41BB-AC51-08F76D2C7672}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63698E93-204C-4AA8-A07B-352539A380BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63698E93-204C-4AA8-A07B-352539A380BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63698E93-204C-4AA8-A07B-352539A380BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63698E93-204C-4AA8-A07B-352539A380BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88812F00-3A9D-4115-8528-86CAC5F280CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88812F00-3A9D-4115-8528-86CAC5F280CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88812F00-3A9D-4115-8528-86CAC5F280CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88812F00-3A9D-4115-8528-86CAC5F280CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E791DB44-D6F9-49B2-8F14-7F005B51B4C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E791DB44-D6F9-49B2-8F14-7F005B51B4C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E791DB44-D6F9-49B2-8F14-7F005B51B4C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E791DB44-D6F9-49B2-8F14-7F005B51B4C9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{67f072ad-f7b8-4693-ba1c-87b07e2538e5}*SharedItemsImports = 13
+		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{230fae06-4c74-45cf-bffa-30c682da0ec3}*SharedItemsImports = 4
+		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{25650acf-5f76-41bb-ac51-08f76d2c7672}*SharedItemsImports = 4
+		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{63698e93-204c-4aa8-a07b-352539a380bf}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
