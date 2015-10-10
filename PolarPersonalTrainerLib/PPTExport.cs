@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using ModernHttpClient;
 
 namespace PolarPersonalTrainerLib
 {
@@ -24,6 +25,7 @@ namespace PolarPersonalTrainerLib
         private String _password;
         private PPTUser _userData;
         private CookieContainer _jar = new CookieContainer();
+        private static Encoding Encoding = System.Text.Encoding.UTF8;
 
         public PPTExport(String userName, String password)
         {
@@ -133,7 +135,7 @@ namespace PolarPersonalTrainerLib
         private async Task<HttpClient> CreateHttpClient(bool login = true)
         {
             // Add handler to keep cookies so the connection is persistent and login is avoided if allready logged in.
-            HttpClientHandler handler = new HttpClientHandler()
+            var handler = new HttpClientHandler()
             {
                 CookieContainer = this._jar
             };
@@ -145,17 +147,15 @@ namespace PolarPersonalTrainerLib
             if (login)
             {
                 // Attempt login
-                var url = BaseUrl + "/index.ftl";
+                const string url = BaseUrl + "/index.ftl";
                 var strPost = string.Format("email={0}&password={1}&.action=login&tz=0", _userName, _password);
 
-                var encoding = Encoding.UTF8;
-                var postData = encoding.GetBytes(strPost);
-                var response = await client.PostAsync(url, new StringContent(strPost, encoding, "application/x-www-form-urlencoded"));
+                var response = await client.GetAsync(url + "?" + strPost);//, new StringContent(strPost, Encoding, "application/x-www-form-urlencoded"));
 
                 var responseStr = await response.Content.ReadAsStringAsync();
                 //var responseStr = postRequest(url, strPost);
 
-                if (responseStr == null || responseStr.Length == 0)
+                if (string.IsNullOrEmpty(responseStr))
                     throw new PPTException("Failed to login to PolarPersonalTrainer.com");
 
                 HtmlDocument doc = new HtmlDocument();
@@ -197,7 +197,7 @@ namespace PolarPersonalTrainerLib
 
             // Attempt to export the XML file for the excercises found above
             url = BaseUrl + "/user/calendar/index.jxml";
-            response = await client.PostAsync(url, new StringContent(strPost, Encoding.UTF8, "application/x-www-form-urlencoded"));
+            response = await client.PostAsync(url, new StringContent(strPost, Encoding, "application/x-www-form-urlencoded"));
             var responseStream = await response.Content.ReadAsStreamAsync();
             var element = XElement.Load(responseStream);
             var reader = element.CreateReader();
@@ -234,7 +234,7 @@ namespace PolarPersonalTrainerLib
 
             // Attempt to export the XML file for the excercises found above
             url = BaseUrl + "/user/calendar/index.gpx";
-            response = await client.PostAsync(url, new StringContent(postStr, Encoding.UTF8, "application/x-www-form-urlencoded"));
+            response = await client.PostAsync(url, new StringContent(postStr, Encoding, "application/x-www-form-urlencoded"));
 
             // Test if GPS data does exist
             if (response.RequestMessage.RequestUri.Query.Contains("nothing_to_export"))
