@@ -120,10 +120,21 @@ namespace PolarPersonalTrainerLib
     public class GpxTrack
     {
         /// <summary>
-        /// Track points
+        /// Track point segments
         /// </summary>
-        [XmlArray("trkseg")]
-        [XmlArrayItemAttribute("trkpt", IsNullable = false)]
+        [XmlElement("trkseg")]
+        //[XmlArrayItemAttribute("trkpt", IsNullable = false)]
+        public GpxTrackSegment[] Segments
+        {
+            get;
+            set;
+        }
+    }
+
+    [XmlType(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
+    public class GpxTrackSegment
+    {
+        [XmlElement("trkpt")]
         public GpxTrackpoint[] Trackpoints
         {
             get;
