@@ -129,6 +129,22 @@ namespace PolarPersonalTrainerLib
             get;
             set;
         }
+
+        public GpxTrackpoint GetTrackPoint(int index)
+        {
+            if (Segments == null)
+                return null;
+            
+            for (int i = 0; i < Segments.Length; i++)
+            {
+                if (index < Segments[i].Trackpoints.Length)
+                    return Segments[i].Trackpoints[index];
+
+                index -= Segments[i].Trackpoints.Length;
+            }
+
+            return null;
+        }
     }
 
     [XmlType(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
