@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace PolarPersonalTrainerLib
@@ -37,6 +38,12 @@ namespace PolarPersonalTrainerLib
         {
             get;
             set;
+        }
+
+        public GpxExercise()
+        {
+            MetaData = new GpxMetadata();
+            Track = new GpxTrack();
         }
     }
 
@@ -135,12 +142,12 @@ namespace PolarPersonalTrainerLib
             if (Segments == null)
                 return null;
             
-            for (int i = 0; i < Segments.Length; i++)
+            foreach (GpxTrackSegment segment in Segments)
             {
-                if (index < Segments[i].Trackpoints.Length)
-                    return Segments[i].Trackpoints[index];
+                if (index < segment.Trackpoints.Count)
+                    return segment.Trackpoints[index];
 
-                index -= Segments[i].Trackpoints.Length;
+                index -= segment.Trackpoints.Count;
             }
 
             return null;
@@ -151,10 +158,15 @@ namespace PolarPersonalTrainerLib
     public class GpxTrackSegment
     {
         [XmlElement("trkpt")]
-        public GpxTrackpoint[] Trackpoints
+        public List<GpxTrackpoint> Trackpoints
         {
             get;
             set;
+        }
+
+        public GpxTrackSegment()
+        {
+            Trackpoints = new List<GpxTrackpoint>();
         }
     }
 
@@ -162,9 +174,11 @@ namespace PolarPersonalTrainerLib
     [XmlType(AnonymousType = true, Namespace = "http://www.topografix.com/GPX/1/1")]
     public class GpxTrackpoint
     {
-        /// <remarks/>
+        /// <summary>
+        /// Altitude
+        /// </summary>
         [XmlElement("ele")]
-        public decimal Elevation
+        public double Elevation
         {
             get;
             set;
@@ -186,17 +200,21 @@ namespace PolarPersonalTrainerLib
             set;
         }
 
-        /// <remarks/>
+        /// <summary>
+        /// Longitude
+        /// </summary>
         [XmlAttribute("lon")]
-        public decimal Longitude
+        public double Longitude
         {
             get;
             set;
         }
 
-        /// <remarks/>
+        /// <summary>
+        /// Latitude
+        /// </summary>
         [XmlAttribute("lat")]
-        public decimal Latitude
+        public double Latitude
         {
             get;
             set;

@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace PolarPersonalTrainerLib
@@ -38,7 +34,7 @@ namespace PolarPersonalTrainerLib
             if (workouts == null)
                 throw new InvalidDataException("No Polar exercises found");
 
-            List<PPTExercise> exercises = new List<PPTExercise>();
+            var exercises = new List<PPTExercise>();
 
             foreach (var element in workouts)
             {
@@ -59,9 +55,6 @@ namespace PolarPersonalTrainerLib
                     continue;
 
                 if (requireSport && sportNode == null)
-                    continue;
-
-                if (sportNode == null && requireSport)
                     continue;
 
                 var hrNode = resultNode.GetFirstElement("heart-rate");

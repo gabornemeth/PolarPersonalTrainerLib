@@ -11,7 +11,7 @@ namespace PolarPersonalTrainerLib.Tests
         public async Task ExportRecent()
         {
             var export = new PPTExport(Settings.UserName, Settings.Password);
-            var exercises = await export.GetExercises(DateTime.Now.AddDays(-2), DateTime.Now);
+            var exercises = await export.GetExercises(DateTime.Now.AddDays(-10), DateTime.Now);
             Assert.IsNotNull(exercises);
             var pptExercises = exercises as PPTExercise[] ?? exercises.ToArray();
             Assert.IsTrue(pptExercises.Any());
@@ -32,7 +32,7 @@ namespace PolarPersonalTrainerLib.Tests
                     Assert.IsTrue(gpxData.Track.Segments.Length > 0);
                     foreach (var segment in gpxData.Track.Segments)
                     {
-                        Assert.IsTrue(segment.Trackpoints.Length > 0);
+                        Assert.IsTrue(segment.Trackpoints.Count > 0);
                     }
                 }
                 catch (PPTException)
