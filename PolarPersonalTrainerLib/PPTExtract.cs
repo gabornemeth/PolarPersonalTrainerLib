@@ -38,7 +38,7 @@ namespace PolarPersonalTrainerLib
 
             foreach (var element in workouts)
             {
-                PPTExercise exercise = new PPTExercise();
+                var exercise = new PPTExercise();
 
                 exercise.Distance = element.GetFirstDescendantValue<float>("distance", CultureInfo.InvariantCulture);
                 exercise.StartTime = element.GetFirstDescendantValue<DateTime>("time");
@@ -84,6 +84,14 @@ namespace PolarPersonalTrainerLib
                 hrData.Vo2Max = userNode.GetFirstDescendantValue<int>("vo2max");
 
                 exercise.HeartRate = hrData;
+
+                // parse altitude data
+                var altitudeNode = resultNode.GetFirstDescendant("altitude-info");
+                if (altitudeNode != null)
+                {
+                    exercise.Ascent = altitudeNode.GetFirstDescendantValue<float>("ascent");
+                    exercise.Descent = altitudeNode.GetFirstDescendantValue<float>("descent");
+                }
 
                 foreach (var sample in element.GetDescendants("sample"))
                 {

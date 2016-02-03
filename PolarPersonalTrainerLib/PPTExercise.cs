@@ -31,7 +31,7 @@ namespace PolarPersonalTrainerLib
         /// Heart rate values [bpm]
         /// </summary>
         public List<byte> Values { get; set; }
- 
+
         public Boolean HasData
         {
             get
@@ -90,5 +90,13 @@ namespace PolarPersonalTrainerLib
         /// Sampling interval [seconds]
         /// </summary>
         public int RecordingRate { get; set; }
+        /// <summary>
+        /// Total ascent [meters]
+        /// </summary>
+        public float Ascent { get; set; }
+        /// <summary>
+        /// Total descent [meters]
+        /// </summary>
+        public float Descent { get; set; }
     }
 }
