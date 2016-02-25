@@ -89,8 +89,8 @@ namespace PolarPersonalTrainerLib
                 var altitudeNode = resultNode.GetFirstDescendant("altitude-info");
                 if (altitudeNode != null)
                 {
-                    exercise.Ascent = altitudeNode.GetFirstDescendantValue<float>("ascent");
-                    exercise.Descent = altitudeNode.GetFirstDescendantValue<float>("descent");
+                    exercise.Ascent = altitudeNode.GetFirstDescendantValue<float>("ascent", CultureInfo.InvariantCulture);
+                    exercise.Descent = altitudeNode.GetFirstDescendantValue<float>("descent", CultureInfo.InvariantCulture);
                 }
 
                 foreach (var sample in element.GetDescendants("sample"))
