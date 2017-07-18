@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PolarPersonalTrainerLib.Tests
 {
@@ -12,16 +7,10 @@ namespace PolarPersonalTrainerLib.Tests
         /// <summary>
         /// Name of the user
         /// </summary>
-        public static string UserName { get; private set; }
+        public static string UserName { get; } = Environment.GetEnvironmentVariable("PPTLIB_USER");
         /// <summary>
         /// Password
         /// </summary>
-        public static string Password { get; private set; }
-
-        static Settings()
-        {
-            UserName = ConfigurationManager.AppSettings["username"];
-            Password = ConfigurationManager.AppSettings["password"];
-        }
+        public static string Password { get; } = Environment.GetEnvironmentVariable("PPTLIB_PASSWORD");
     }
 }

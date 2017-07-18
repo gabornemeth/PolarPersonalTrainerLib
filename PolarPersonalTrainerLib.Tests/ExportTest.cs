@@ -1,13 +1,14 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using System.Linq;
+using NUnit.Framework;
+
 namespace PolarPersonalTrainerLib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class ExportTest
     {
-        [TestMethod]
+        [Test]
         public async Task ExportRecent()
         {
             var export = new PPTExport(Settings.UserName, Settings.Password);

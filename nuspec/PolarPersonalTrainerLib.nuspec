@@ -1,0 +1,27 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>PolarPersonalTrainerLib</id>
+    <version>1.1.0</version>
+    <title>PolarPersonalTrainerLib</title>
+    <authors>Gabor Nemeth</authors>
+    <owners>Gabor Nemeth</owners>
+    <projectUrl>https://github.com/gabornemeth/PolarPersonalTrainerLib/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Library for basic data extraction from PolarPersonalTrainer.com. This is a workaround, as there's no public API.</description>
+    <copyright>Copyright © PolarPersonalTrainerLib project 2013-2015</copyright>
+    <tags>polar personaltrainer</tags>
+    <dependencies>
+      <group targetFramework="netstandard1.3">
+        <dependency id="HtmlAgilityPack" version="1.5.1" />
+        <dependency id="System.Net.Http" version="4.3.2" />
+        <dependency id="System.Xml.XmlDocument" version="4.3.0" />
+        <dependency id="System.Xml.XmlSerializer" version="4.3.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- .NET Standard 1.3 -->
+    <file src="../PolarPersonalTrainerLib.NetStandard/bin/Release/netstandard1.3/PolarPersonalTrainerLib.dll" target="lib/netstandard1.3" />
+  </files>
+</package>

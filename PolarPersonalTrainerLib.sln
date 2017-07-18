@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarPersonalTrainerLib.PCL", "PolarPersonalTrainerLib.PCL\PolarPersonalTrainerLib.PCL.csproj", "{63698E93-204C-4AA8-A07B-352539A380BF}"
 EndProject
@@ -20,15 +20,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B73A33
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarPersonalTrainerLib.Droid", "PolarPersonalTrainerLib.Droid\PolarPersonalTrainerLib.Droid.csproj", "{25650ACF-5F76-41BB-AC51-08F76D2C7672}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarPersonalTrainerLib.iOS", "PolarPersonalTrainerLib.iOS\PolarPersonalTrainerLib.iOS.csproj", "{88812F00-3A9D-4115-8528-86CAC5F280CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolarPersonalTrainerLib.NetStandard", "PolarPersonalTrainerLib.NetStandard\PolarPersonalTrainerLib.NetStandard.csproj", "{9F39FB03-FB0B-4545-A7C5-7FB26985A5A7}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{67f072ad-f7b8-4693-ba1c-87b07e2538e5}*SharedItemsImports = 13
-		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{88812f00-3a9d-4115-8528-86cac5f280ca}*SharedItemsImports = 4
 		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{230fae06-4c74-45cf-bffa-30c682da0ec3}*SharedItemsImports = 4
 		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{25650acf-5f76-41bb-ac51-08f76d2c7672}*SharedItemsImports = 4
 		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{63698e93-204c-4aa8-a07b-352539a380bf}*SharedItemsImports = 4
+		PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems*{67f072ad-f7b8-4693-ba1c-87b07e2538e5}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,10 +50,10 @@ Global
 		{25650ACF-5F76-41BB-AC51-08F76D2C7672}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25650ACF-5F76-41BB-AC51-08F76D2C7672}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25650ACF-5F76-41BB-AC51-08F76D2C7672}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88812F00-3A9D-4115-8528-86CAC5F280CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88812F00-3A9D-4115-8528-86CAC5F280CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88812F00-3A9D-4115-8528-86CAC5F280CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88812F00-3A9D-4115-8528-86CAC5F280CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F39FB03-FB0B-4545-A7C5-7FB26985A5A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F39FB03-FB0B-4545-A7C5-7FB26985A5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F39FB03-FB0B-4545-A7C5-7FB26985A5A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F39FB03-FB0B-4545-A7C5-7FB26985A5A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
