@@ -130,31 +130,14 @@ Task("Build")
     {
         Information("Building {0}", project);
 
-				/*if (buildSettings.Build.EnableXamarinIOS)
-				{
-					// Mac build host connection properties
-					msBuildSettings.WithProperty("ServerAddress", buildSettings.Build.MacAgentIPAddress);
-					msBuildSettings.WithProperty("ServerUser", buildSettings.Build.MacAgentUserName);
-					msBuildSettings.WithProperty("ServerPassword", buildSettings.Build.MacAgentUserPassword);
-				}*/
-				if (IsRunningOnWindows())
-				{
-					var msBuildSettings = new MSBuildSettings {
+  			var msBuildSettings = new MSBuildSettings {
 						MaxCpuCount = 1,
 						Configuration = configuration,
 						PlatformTarget = PlatformTarget.MSIL
-					}.WithProperty("TreatWarningsAsErrors",buildSettings.Build.TreatWarningsAsErrors.ToString())
-					 .WithTarget("Build");
-				 	MSBuild(project, msBuildSettings);
 				}
-				else
-				{
-					var settings = new XBuildSettings {
-						Configuration = configuration
-					}.WithProperty("TreatWarningsAsErrors",buildSettings.Build.TreatWarningsAsErrors.ToString())
-					 .WithTarget("Build");
-					XBuild(project, settings);
-				}
+				.WithProperty("TreatWarningsAsErrors",buildSettings.Build.TreatWarningsAsErrors.ToString())
+				.WithTarget("Build");
+				MSBuild(project, msBuildSettings);
     }
 });
 
