@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wpa81;</PackageTargetFallback>
     <TargetFramework>netstandard1.3</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>PolarPersonalTrainerLib</RootNamespace>
@@ -14,4 +13,6 @@
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
     <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
   </ItemGroup>
+
+  <Import Project="..\PolarPersonalTrainerLib\PolarPersonalTrainerLib.projitems" Label="Shared" />
 </Project>
