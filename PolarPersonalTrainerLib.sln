@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarPersonalTrainerLib.PCL", "PolarPersonalTrainerLib.PCL\PolarPersonalTrainerLib.PCL.csproj", "{63698E93-204C-4AA8-A07B-352539A380BF}"
 EndProject
@@ -21,6 +21,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolarPersonalTrainerLib.Droid", "PolarPersonalTrainerLib.Droid\PolarPersonalTrainerLib.Droid.csproj", "{25650ACF-5F76-41BB-AC51-08F76D2C7672}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolarPersonalTrainerLib.NetStandard", "PolarPersonalTrainerLib.NetStandard\PolarPersonalTrainerLib.NetStandard.csproj", "{9F39FB03-FB0B-4545-A7C5-7FB26985A5A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuspec", "nuspec", "{59C36135-25B1-43BD-B94F-1561F99FDB0A}"
+	ProjectSection(SolutionItems) = preProject
+		nuspec\PolarPersonalTrainerLib.nuspec = nuspec\PolarPersonalTrainerLib.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -57,5 +62,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79BB33F9-89F8-482F-B96A-6C11089D98ED}
 	EndGlobalSection
 EndGlobal
